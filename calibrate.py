@@ -225,9 +225,7 @@ def temperature_scaling(logits_dev: torch.Tensor, labels_dev: torch.Tensor,
 
 
 class ModelWithTemperature(torch.nn.Module):
-    """
-    A thin decorator, which wraps a model with temperature scaling
-    """
+    """A thin decorator, which wraps a model with temperature scaling."""
 
     def __init__(self):
         super(ModelWithTemperature, self).__init__()

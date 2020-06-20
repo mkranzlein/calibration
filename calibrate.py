@@ -80,7 +80,7 @@ def estimate_error(scores: torch.Tensor, labels: torch.Tensor,
 
     ece = 0
     for lower, upper in zip(lower_boundaries, upper_boundaries):
-        bin_mask = valid_scores.ge(lower) * valid_scores.lt(upper)
+        bin_mask = valid_scores.ge(lower) & valid_scores.lt(upper)
         proportion_in_bin = bin_mask.double().mean()
         if proportion_in_bin.item() > 0:
             average_label = valid_labels[bin_mask].double().mean()
@@ -118,9 +118,9 @@ def histogram_binning(scores_dev: torch.Tensor, labels_dev: torch.Tensor,
     flattened_scores_test = scores_test.clone().reshape(-1)
 
     for lower, upper in zip(lower_boundaries, upper_boundaries):
-        bin_mask_dev = flattened_scores_dev.ge(lower) * flattened_scores_dev.lt(upper)
+        bin_mask_dev = flattened_scores_dev.ge(lower) & flattened_scores_dev.lt(upper)
         average_dev_label = flattened_labels_dev[bin_mask_dev].float().mean()
-        bin_mask_test = flattened_scores_test.ge(lower) * flattened_scores_test.lt(upper)
+        bin_mask_test = flattened_scores_test.ge(lower) & flattened_scores_test.lt(upper)
         flattened_scores_test[bin_mask_test] = average_dev_label
 
     labelset_size = scores_dev.shape[1]
